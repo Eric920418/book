@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build:*)",
+      "Bash(pnpm prisma generate:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
