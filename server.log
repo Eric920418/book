@@ -1,0 +1,10 @@
+
+> book-showcase@0.1.0 start /var/www/book
+> next start
+
+   ▲ Next.js 15.5.6
+   - Local:        http://localhost:3000
+   - Network:      http://172.26.7.215:3000
+
+ ✓ Starting...
+ ✓ Ready in 900ms
