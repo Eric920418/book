@@ -1,0 +1,36 @@
+<svg width="400" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="400" height="600" fill="#f3f4f6"/>
+
+  <!-- 裝飾線條 -->
+  <line x1="40" y1="100" x2="360" y2="100" stroke="#9333ea" stroke-width="2"/>
+  <line x1="40" y1="500" x2="360" y2="500" stroke="#9333ea" stroke-width="2"/>
+
+  <!-- 書名 -->
+  <text x="200" y="250" font-family="Arial, sans-serif" font-size="36" font-weight="bold"
+        text-anchor="middle" fill="#111827">
+    你不是破碎
+  </text>
+  <text x="200" y="300" font-family="Arial, sans-serif" font-size="36" font-weight="bold"
+        text-anchor="middle" fill="#111827">
+    而是入口
+  </text>
+
+  <!-- 副標題 -->
+  <text x="200" y="350" font-family="Arial, sans-serif" font-size="18"
+        text-anchor="middle" fill="#6b7280">
+    在身體裡，慢一點，看見光
+  </text>
+
+  <!-- 作者 -->
+  <text x="200" y="450" font-family="Arial, sans-serif" font-size="20"
+        text-anchor="middle" fill="#111827">
+    趙耕樂 著
+  </text>
+
+  <!-- 佔位符提示 -->
+  <text x="200" y="550" font-family="Arial, sans-serif" font-size="14"
+        text-anchor="middle" fill="#9ca3af">
+    [封面圖片佔位符]
+  </text>
+</svg>

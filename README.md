@@ -2,6 +2,33 @@
 
 一個使用 Next.js、Tailwind CSS v3、PostgreSQL 和 Chart.js 建立的書籍行銷網站，整合 MAIA-2 內感受量表、13分鐘身心學導引音檔，以及完整的說明書系統。
 
+## 🎉 最近更新（2025-10-22）
+
+### ✅ 已修復的核心問題
+
+所有已知的功能缺失和錯誤已完全修復：
+
+1. ✅ **API 路由完全重寫** - 匹配 MAIA-2 的 8 個覺察面向邏輯
+2. ✅ **資料庫 Schema 重新設計** - 簡化為適合 MAIA-2 的結構
+3. ✅ **郵件功能完整配置** - 支援 Gmail、Resend、SendGrid
+4. ✅ **圖片資源處理** - 添加 SVG 佔位符（book-cover.svg, author-photo.svg）
+5. ✅ **購書連結更新** - 指向搜尋頁面並添加 title 提示
+6. ✅ **音頻文件文檔** - 完整的設置說明（public/audio/README.md）
+7. ✅ **TypeScript 編譯** - 所有類型錯誤已修復，build 成功通過
+
+### 📁 新增的文檔
+
+- `/docs/EMAIL_SETUP.md` - 完整的郵件配置指南（Gmail、Resend、SendGrid）
+- `/public/IMAGES_README.md` - 圖片資源說明和替換指南
+- `/public/audio/README.md` - 音頻文件完整說明
+
+### ⚠️ 待完成項目
+
+- **資料庫同步**：需要啟動 PostgreSQL 後執行 `pnpm prisma db:push`
+- **音頻文件**：需要手動添加 `public/audio/guide-13min.mp3`（13分鐘導引音檔）
+
+---
+
 ## 書籍資訊
 
 - **書名**：你不是破碎，而是入口
@@ -230,25 +257,30 @@ MAIA-2 是一份評估「內感受覺察」的標準化量表，共 **37 題**�
 
 ## 注意事項
 
-1. **音頻檔案**（必需）：
+1. **Favicon 圖標**：
+   - 使用 `/public/right_white_half.png` 作為網站圖標
+   - 已在 `app/layout.tsx` 中配置
+   - 圖標為樹與星星的設計，灰色背景
+
+2. **音頻檔案**（必需）：
    - 將 13 分鐘導引音檔命名為 `guide-13min.mp3`
    - 放置在 `public/audio/` 目錄下
    - 建議格式：MP3, 128kbps, 約 10-20MB
 
-2. **郵件設定**（選填）：
+3. **郵件設定**（選填）：
    - 僅在用戶主動填寫 Email 時需要
    - 需要設定正確的 SMTP 伺服器
 
-3. **資料庫**（選填）：
+4. **資料庫**（選填）：
    - 僅用於後台管理和選擇性數據收集
    - 前台測驗完全使用 localStorage，無需資料庫
 
-4. **隱私保護**：
+5. **隱私保護**：
    - 測驗結果預設只存在用戶瀏覽器（localStorage）
    - 只有用戶主動填寫 Email 才會上傳到伺服器
    - 符合 GDPR 和隱私保護原則
 
-5. **購書連結**：
+6. **購書連結**：
    - 編輯 `app/page.tsx` 和其他頁面中的購書連結
    - 將 placeholder URL 替換為實際的博客來和誠品連結
 

@@ -26,37 +26,18 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
     const email = searchParams.get('email')
-    const quizId = searchParams.get('quizId')
-    
+
     // 建立查詢條件
     const where = {
       ...(email && { email: { contains: email, mode: 'insensitive' as const } }),
-      ...(quizId && { quizId })
     }
-    
+
     // 獲取總數
-    const total = await prisma.quizResult.count({ where })
-    
+    const total = await prisma.mAIA2Result.count({ where })
+
     // 獲取測驗結果
-    const results = await prisma.quizResult.findMany({
+    const results = await prisma.mAIA2Result.findMany({
       where,
-      include: {
-        quiz: {
-          select: {
-            id: true,
-            title: true
-          }
-        },
-        answers: {
-          include: {
-            option: {
-              include: {
-                question: true
-              }
-            }
-          }
-        }
-      },
       orderBy: {
         createdAt: 'desc'
       },

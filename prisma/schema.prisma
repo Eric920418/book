@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma schema for MAIA-2 內感受量表系統
+// 《你不是破碎，而是入口》書籍網站
 
 generator client {
   provider = "prisma-client-js"
@@ -17,106 +14,44 @@ datasource db {
 model Admin {
   id        String   @id @default(cuid())
   email     String   @unique
-  password  String
+  password  String   // 使用 bcrypt 雜湊
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("admins")
 }
 
-// 書籍資訊
-model Book {
-  id          String   @id @default(cuid())
-  title       String
-  description String   @db.Text
-  coverImage  String?
-  audioUrl    String?
-  publishDate DateTime?
-  isbn        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  author      Author   @relation(fields: [authorId], references: [id])
-  authorId    String
+// MAIA-2 測驗結果資料表
+// 儲存用戶主動分享的測驗結果（填寫 email 者）
+model MAIA2Result {
+  id              String   @id @default(cuid())
+  email           String   // 用戶填寫的 email
+
+  // 8 個覺察面向分數（0-5分）
+  dimensionScores Json     // { noticing: 3.25, notDistracting: 2.83, ... }
+
+  // 測驗完成時間
+  completedAt     DateTime
+
+  // 其他元數據
+  metadata        Json?    // { userAgent, submittedAt, ... }
+
+  // 創建時間（資料庫記錄時間）
+  createdAt       DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+  @@map("maia2_results")
 }
 
-// 作者資訊
-model Author {
-  id          String   @id @default(cuid())
-  name        String
-  biography   String   @db.Text
-  photo       String?
-  email       String?
-  website     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  books       Book[]
-}
-
-// 測驗資料表
-model Quiz {
-  id          String      @id @default(cuid())
-  title       String
-  description String?
-  isActive    Boolean     @default(true)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  questions   Question[]
-  results     QuizResult[]
-}
-
-// 問題資料表
-model Question {
-  id          String   @id @default(cuid())
-  text        String
-  order       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  quizId      String
-  options     Option[]
-}
-
-// 選項資料表
-model Option {
-  id          String   @id @default(cuid())
-  text        String
-  score       Int      @default(0) // 用於計算結果的分數
-  order       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  questionId  String
-  answers     Answer[]
-}
-
-// 測驗結果資料表
-model QuizResult {
-  id          String   @id @default(cuid())
-  email       String
-  totalScore  Int
-  resultData  Json     // 儲存詳細的測驗結果
-  createdAt   DateTime @default(now())
-  
-  quiz        Quiz     @relation(fields: [quizId], references: [id])
-  quizId      String
-  answers     Answer[]
-}
-
-// 答案資料表（記錄每個問題的答案）
-model Answer {
-  id          String     @id @default(cuid())
-  
-  result      QuizResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
-  resultId    String
-  
-  option      Option     @relation(fields: [optionId], references: [id])
-  optionId    String
-  
-  createdAt   DateTime   @default(now())
-  
-  @@unique([resultId, optionId])
-}
+// 未來擴展：如果需要記錄詳細的 37 題答案，可以新增以下 model
+// model MAIA2Answer {
+//   id          String       @id @default(cuid())
+//   result      MAIA2Result  @relation(fields: [resultId], references: [id], onDelete: Cascade)
+//   resultId    String
+//   questionId  Int          // 1-37
+//   score       Int          // 0-5（原始分數，不含反向計分）
+//   createdAt   DateTime     @default(now())
+//   @@map("maia2_answers")
+// }

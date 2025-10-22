@@ -5,7 +5,7 @@ export default function Home() {
   const bookData = {
     title: "你不是破碎，而是入口",
     subtitle: "在身體裡，慢一點，看見光。",
-    coverImage: "/book-cover.jpg",
+    coverImage: "/book-cover.svg",
     description: "你好，我是 趙耕樂，徒手物理治療師。多年臨床的陪伴與看見，我寫成一本書——《你不是破碎，而是入口》。為了讓療癒不只停在文字，我也準備了導引與量表：讀，是光；做，是溫；看見，是方向。",
     publishDate: "2024年",
     isbn: "978-XXX-XXX-XXX-X"
@@ -13,7 +13,7 @@ export default function Home() {
 
   const authorData = {
     name: "趙耕樂",
-    photo: "/author-photo.jpg",
+    photo: "/author-photo.svg",
     biography: "徒手物理治療師，多年臨床經驗，致力於透過身體工作幫助人們重新連結自我，看見內在的光。",
     website: "https://example.com"
   };
@@ -77,18 +77,20 @@ export default function Home() {
             <p className="text-lg mb-6">《{bookData.title}》——在文字裡點燈，在身體裡安住。</p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <a
-                href="https://www.books.com.tw"
+                href="https://www.books.com.tw/search?query=你不是破碎而是入口"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                title="博客來購書連結（請替換為實際書籍頁面）"
               >
                 📚 博客來
               </a>
               <a
-                href="https://www.eslite.com"
+                href="https://www.eslite.com/Search?keyword=你不是破碎而是入口"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-8 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                title="誠品購書連結（請替換為實際書籍頁面）"
               >
                 📖 誠品
               </a>

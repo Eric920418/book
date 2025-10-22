@@ -179,18 +179,20 @@ export default function GuidePage() {
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <a
-                href="https://www.books.com.tw"
+                href="https://www.books.com.tw/search?query=你不是破碎而是入口"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-primary text-primary-foreground px-8 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                title="博客來購書連結（請替換為實際書籍頁面）"
               >
                 博客來
               </a>
               <a
-                href="https://www.eslite.com"
+                href="https://www.eslite.com/Search?keyword=你不是破碎而是入口"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-secondary text-secondary-foreground px-8 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                title="誠品購書連結（請替換為實際書籍頁面）"
               >
                 誠品
               </a>

@@ -218,10 +218,11 @@ export default function ResultPage() {
               在書中找到更多關於身體覺察與內在療癒的智慧。
             </p>
             <a
-              href="https://www.books.com.tw"
+              href="https://www.books.com.tw/search?query=你不是破碎而是入口"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold"
+              title="博客來購書連結（請替換為實際書籍頁面）"
             >
               購買書籍
             </a>
