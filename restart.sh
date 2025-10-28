@@ -2,22 +2,12 @@
 
 echo "🔄 開始重啟服務..."
 
-# 1. 關閉目前的 Next.js 伺服器
+# 1. 停止 PM2
 echo "📛 正在關閉伺服器..."
-# 終止所有相關進程（包括父進程和子進程）
-pkill -f "next-server" || echo "沒有找到 next-server"
-pkill -f "next start" || echo "沒有找到 next start"
-pkill -f "next dev" || true
+pm2 stop book-showcase || echo "PM2 未運行"
 
 # 等待進程完全關閉
 sleep 3
-
-# 確認端口已釋放
-if ss -tlnp | grep -q :3000; then
-  echo "⚠️  端口 3000 仍被佔用，強制終止..."
-  fuser -k 3000/tcp 2>/dev/null || true
-  sleep 1
-fi
 
 # 2. 刪除 .next 資料夾
 echo "🗑️  正在刪除 .next 資料夾..."
@@ -39,9 +29,12 @@ fi
 
 echo "✅ 建置完成"
 
-# 4. 啟動伺服器
+# 4. 使用 PM2 啟動
 echo "🚀 正在啟動伺服器..."
-npm run start &
+pm2 restart book-showcase || pm2 start ecosystem.config.js
+pm2 save
 
 echo "✅ 重啟完成！"
-echo "💡 提示：使用 'pkill -f \"next start\"' 可以停止伺服器"
+echo "💡 使用 'pm2 logs' 查看日誌"
+echo "💡 使用 'pm2 status' 查看狀態"
+echo "💡 使用 'pm2 monit' 監控資源使用"

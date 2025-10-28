@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(pnpm build:*)",
-      "Bash(pnpm prisma generate:*)"
+      "Bash(pnpm prisma generate:*)",
+      "Bash(pm2 start:*)",
+      "Bash(sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup:*)",
+      "Bash(sudo nginx:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []
