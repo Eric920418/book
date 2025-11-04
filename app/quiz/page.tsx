@@ -91,14 +91,14 @@ export default function QuizPage() {
     <div className="min-h-screen bg-background">
       {/* 導航欄 */}
       <nav className="bg-card border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="text-xl font-bold text-primary hover:opacity-80">
+        <div className="container mx-auto px-3 md:px-4 py-3 md:py-4">
+          <div className="flex justify-between items-center gap-2 md:gap-4">
+            <Link href="/" className="text-sm md:text-xl font-bold text-primary hover:opacity-80 truncate min-w-0 flex-shrink">
               《你不是破碎，而是入口》
             </Link>
             <Link
               href="/quiz/manual"
-              className="text-foreground/70 hover:text-primary transition-colors"
+              className="text-xs md:text-base text-foreground/70 hover:text-primary transition-colors whitespace-nowrap flex-shrink-0"
             >
               量表說明
             </Link>
@@ -106,26 +106,26 @@ export default function QuizPage() {
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-12 max-w-4xl">
+      <main className="container mx-auto px-3 md:px-4 py-8 md:py-12 max-w-4xl">
         {!isCompleted ? (
           // 測驗進行中
           <div className="animate-fade-in">
             {/* 測驗標題 */}
-            <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+            <div className="text-center mb-6 md:mb-8">
+              <h1 className="text-2xl md:text-4xl font-bold mb-2">
                 MAIA-2 內感受量表
               </h1>
-              <p className="text-foreground/70 text-lg">
+              <p className="text-foreground/70 text-base md:text-lg">
                 一份描繪「我與身體關係」的 8 個面向量表
               </p>
-              <p className="text-sm text-foreground/60 mt-2">
+              <p className="text-xs md:text-sm text-foreground/60 mt-2">
                 共 37 題，請依照你「平常的生活狀態」作答
               </p>
             </div>
 
             {/* 進度條 */}
-            <div className="mb-8">
-              <div className="flex justify-between text-sm text-foreground/70 mb-2">
+            <div className="mb-6 md:mb-8">
+              <div className="flex justify-between text-xs md:text-sm text-foreground/70 mb-2">
                 <span>
                   問題 {currentQuestionIndex + 1} / {questions.length}
                 </span>
@@ -140,40 +140,40 @@ export default function QuizPage() {
             </div>
 
             {/* 問題卡片 */}
-            <div className="bg-card rounded-2xl p-6 md:p-10 shadow-lg mb-8">
-              <div className="mb-8">
-                <div className="text-sm text-foreground/60 mb-2">
+            <div className="bg-card rounded-2xl p-4 md:p-10 shadow-lg mb-6 md:mb-8">
+              <div className="mb-6 md:mb-8">
+                <div className="text-xs md:text-sm text-foreground/60 mb-2">
                   題目 {currentQuestion.id} / {questions.length}
                 </div>
-                <h2 className="text-xl md:text-2xl font-semibold leading-relaxed">
+                <h2 className="text-lg md:text-2xl font-semibold leading-relaxed">
                   {currentQuestion.text}
                 </h2>
               </div>
 
               {/* 評分選項 (0-5) */}
-              <div className="space-y-4">
-                <p className="text-center text-foreground/70 mb-6">
+              <div className="space-y-2 md:space-y-4">
+                <p className="text-center text-xs md:text-base text-foreground/70 mb-3 md:mb-6">
                   請選擇最符合你平常狀態的選項
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-1.5 md:gap-3">
                   {[0, 1, 2, 3, 4, 5].map((score) => (
                     <button
                       key={score}
                       onClick={() => handleScoreSelect(score)}
-                      className={`p-4 rounded-lg border-2 transition-all text-center ${
+                      className={`p-2 md:p-4 rounded-lg border-2 transition-all text-center ${
                         selectedScore === score
                           ? "border-primary bg-primary/10 scale-105"
                           : "border-border hover:border-primary/50 hover:scale-102"
                       }`}
                     >
-                      <div className="text-2xl font-bold mb-1">{score}</div>
-                      <div className="text-xs text-foreground/70">
+                      <div className="text-lg md:text-2xl font-bold mb-0.5 md:mb-1">{score}</div>
+                      <div className="text-[9px] md:text-xs text-foreground/70 leading-tight">
                         {SCORE_LABELS[score]}
                       </div>
                     </button>
                   ))}
                 </div>
-                <div className="flex justify-between text-sm text-foreground/60 mt-4 px-2">
+                <div className="flex justify-between text-[10px] md:text-sm text-foreground/60 mt-2 md:mt-4 px-0.5 md:px-2">
                   <span>← 從不</span>
                   <span>總是 →</span>
                 </div>
@@ -181,30 +181,39 @@ export default function QuizPage() {
             </div>
 
             {/* 導航按鈕 */}
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-3 md:gap-4">
               <button
                 onClick={handlePrevious}
                 disabled={currentQuestionIndex === 0}
-                className="px-6 py-3 rounded-lg border-2 border-foreground/20 hover:bg-foreground/5
-                         transition-colors disabled:opacity-30 disabled:cursor-not-allowed font-semibold"
+                className="px-4 md:px-6 py-2.5 md:py-3 rounded-lg border-2 border-foreground/20 hover:bg-foreground/5
+                         transition-colors disabled:opacity-30 disabled:cursor-not-allowed font-semibold text-sm md:text-base"
               >
-                ← 上一題
+                <span className="hidden sm:inline">← 上一題</span>
+                <span className="sm:hidden">←</span>
               </button>
               <button
                 onClick={handleNext}
                 disabled={selectedScore === undefined}
-                className="px-8 py-3 bg-foreground text-background rounded-lg
+                className="px-5 md:px-8 py-2.5 md:py-3 bg-foreground text-background rounded-lg
                          hover:opacity-90 transition-opacity disabled:opacity-30
-                         disabled:cursor-not-allowed font-semibold"
+                         disabled:cursor-not-allowed font-semibold text-sm md:text-base"
               >
-                {currentQuestionIndex === questions.length - 1
-                  ? "完成測驗 →"
-                  : "下一題 →"}
+                {currentQuestionIndex === questions.length - 1 ? (
+                  <>
+                    <span className="hidden sm:inline">完成測驗 →</span>
+                    <span className="sm:hidden">完成 →</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="hidden sm:inline">下一題 →</span>
+                    <span className="sm:hidden">→</span>
+                  </>
+                )}
               </button>
             </div>
 
             {/* 底部提示 */}
-            <div className="mt-8 text-center text-sm text-foreground/60">
+            <div className="mt-6 md:mt-8 text-center text-xs md:text-sm text-foreground/60 px-2">
               <p>
                 建議第一次作為基線，4-8 週後再重測。
                 <br />
@@ -215,12 +224,12 @@ export default function QuizPage() {
         ) : (
           // 測驗完成 - Email輸入畫面
           <div className="max-w-2xl mx-auto animate-fade-in">
-            <div className="bg-card rounded-2xl p-8 md:p-12 shadow-lg text-center">
+            <div className="bg-card rounded-2xl p-5 md:p-12 shadow-lg text-center">
               {/* 完成圖示 */}
-              <div className="mb-6">
-                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="mb-5 md:mb-6">
+                <div className="w-16 md:w-20 h-16 md:h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
                   <svg
-                    className="w-10 h-10 text-green-600 dark:text-green-400"
+                    className="w-8 md:w-10 h-8 md:h-10 text-green-600 dark:text-green-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -233,18 +242,18 @@ export default function QuizPage() {
                     />
                   </svg>
                 </div>
-                <h2 className="text-3xl font-bold mb-2">測驗完成！</h2>
-                <p className="text-foreground/70 text-lg">
+                <h2 className="text-2xl md:text-3xl font-bold mb-2">測驗完成！</h2>
+                <p className="text-foreground/70 text-base md:text-lg">
                   感謝你完成 MAIA-2 內感受量表
                 </p>
               </div>
 
               {/* Email輸入表單 */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4">
+              <div className="mb-6 md:mb-8">
+                <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 px-2">
                   留下您的電子郵件，我們將把完整結果寄給您
                 </h3>
-                <p className="text-foreground/60 text-sm mb-6">
+                <p className="text-foreground/60 text-xs md:text-sm mb-5 md:mb-6 px-2">
                   為了讓您能隨時查看測驗結果，請填寫您的電子郵件。<br />
                   我們會將完整的 MAIA-2 覺察輪廓寄送給您。
                 </p>
@@ -255,23 +264,23 @@ export default function QuizPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="請輸入您的電子郵件"
                   required
-                  className="w-full px-4 py-3 rounded-lg border-2 border-border focus:border-primary
-                           focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all mb-6"
+                  className="w-full px-3 md:px-4 py-2.5 md:py-3 rounded-lg border-2 border-border focus:border-primary
+                           focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all mb-5 md:mb-6 text-sm md:text-base"
                 />
 
-                <div className="flex flex-col md:flex-row gap-4 justify-center">
+                <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
                   <button
                     onClick={saveAndViewResult}
                     disabled={isSubmitting || !email.trim()}
-                    className="px-8 py-4 bg-foreground text-background rounded-lg
+                    className="px-6 md:px-8 py-3 md:py-4 bg-foreground text-background rounded-lg
                              hover:opacity-90 transition-opacity disabled:opacity-50
-                             disabled:cursor-not-allowed font-semibold text-lg"
+                             disabled:cursor-not-allowed font-semibold text-base md:text-lg"
                   >
                     {isSubmitting ? "發送中..." : "查看測驗結果"}
                   </button>
                 </div>
 
-                <p className="mt-6 text-xs text-foreground/60">
+                <p className="mt-5 md:mt-6 text-[10px] md:text-xs text-foreground/60 px-2">
                   我們尊重您的隱私，電子郵件僅用於發送測驗結果
                 </p>
               </div>

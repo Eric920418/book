@@ -28,6 +28,15 @@ const config: Config = {
           foreground: "var(--card-foreground)",
         },
         border: "var(--border)",
+        // 自訂灰階色系
+        gray: {
+          darkest: "var(--gray-darkest)",
+          dark: "var(--gray-dark)",
+          medium: "var(--gray-medium)",
+          light: "var(--gray-light)",
+          lightest: "var(--gray-lightest)",
+          white: "var(--gray-white)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

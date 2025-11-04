@@ -5,9 +5,9 @@ export default function QuizManualPage() {
     <div className="min-h-screen bg-background">
       {/* 導航欄 */}
       <nav className="bg-card border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-3 md:px-4 py-3 md:py-4">
           <div className="flex justify-between items-center">
-            <Link href="/quiz" className="text-xl font-bold text-primary hover:opacity-80">
+            <Link href="/quiz" className="text-sm md:text-xl font-bold text-primary hover:opacity-80">
               ← 返回測驗頁面
             </Link>
           </div>
@@ -15,8 +15,8 @@ export default function QuizManualPage() {
       </nav>
 
       {/* 主要內容 */}
-      <main className="container mx-auto px-4 py-12">
-        <article className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
+      <main className="container mx-auto px-4 md:px-6 py-8 md:py-12">
+        <article className="max-w-4xl mx-auto prose prose-sm md:prose-lg dark:prose-invert">
           <h1>📖 MAIA-2 中文版量表｜使用與解讀說明</h1>
 
           <p className="lead">

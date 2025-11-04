@@ -3,33 +3,65 @@
 @tailwind utilities;
 
 :root {
+  /* 主要色系 - 淺色模式 */
   --background: #ffffff;
-  --foreground: #171717;
-  --primary: #2563eb;
+  --foreground: #000000;
+
+  /* 主色調 - 深灰 */
+  --primary: #58595b;
   --primary-foreground: #ffffff;
-  --secondary: #f3f4f6;
-  --secondary-foreground: #111827;
-  --accent: #f59e0b;
-  --accent-foreground: #ffffff;
+
+  /* 次要色調 - 極淺灰 */
+  --secondary: #f9f9f9;
+  --secondary-foreground: #000000;
+
+  /* 強調色 - 中灰 */
+  --accent: #b6b6b6;
+  --accent-foreground: #000000;
+
+  /* 卡片 */
   --card: #ffffff;
-  --card-foreground: #171717;
-  --border: #e5e7eb;
+  --card-foreground: #000000;
+
+  /* 邊框 - 淺灰 */
+  --border: #d9d9d9;
+
+  /* 圓角 */
   --radius: 0.5rem;
+
+  /* 額外的灰階變數供直接使用 */
+  --gray-darkest: #000000;
+  --gray-dark: #58595b;
+  --gray-medium: #b6b6b6;
+  --gray-light: #d9d9d9;
+  --gray-lightest: #f9f9f9;
+  --gray-white: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --primary: #3b82f6;
-    --primary-foreground: #ffffff;
-    --secondary: #1f2937;
-    --secondary-foreground: #f9fafb;
-    --accent: #fbbf24;
-    --accent-foreground: #111827;
-    --card: #171717;
-    --card-foreground: #ededed;
-    --border: #374151;
+    /* 主要色系 - 深色模式 */
+    --background: #000000;
+    --foreground: #ffffff;
+
+    /* 主色調 - 中灰 */
+    --primary: #b6b6b6;
+    --primary-foreground: #000000;
+
+    /* 次要色調 - 深灰 */
+    --secondary: #58595b;
+    --secondary-foreground: #f9f9f9;
+
+    /* 強調色 - 淺灰 */
+    --accent: #d9d9d9;
+    --accent-foreground: #000000;
+
+    /* 卡片 */
+    --card: #58595b;
+    --card-foreground: #ffffff;
+
+    /* 邊框 - 深灰 */
+    --border: #58595b;
   }
 }
 
