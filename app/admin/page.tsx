@@ -174,12 +174,6 @@ export default function AdminLoginPage() {
           </div>
         </div>
 
-        {/* 測試提示 */}
-        <div className="mt-4 p-4 bg-secondary rounded-lg text-sm text-foreground/70">
-          <p className="font-semibold mb-1">測試帳號：</p>
-          <p>Email: admin@example.com</p>
-          <p>密碼: admin123</p>
-        </div>
       </div>
     </div>
   )
