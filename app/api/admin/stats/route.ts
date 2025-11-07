@@ -74,11 +74,11 @@ export async function GET(request: NextRequest) {
     sevenDaysAgo.setHours(0, 0, 0, 0)
 
     const dailyResultsRaw = await prisma.$queryRaw<{ date: Date; count: bigint }[]>`
-      SELECT DATE(created_at) as date, COUNT(*) as count
+      SELECT DATE("createdAt") as date, COUNT(*) as count
       FROM "maia2_results"
-      WHERE created_at >= ${sevenDaysAgo}
-      GROUP BY DATE(created_at)
-      ORDER BY DATE(created_at)
+      WHERE "createdAt" >= ${sevenDaysAgo}
+      GROUP BY DATE("createdAt")
+      ORDER BY DATE("createdAt")
     `
 
     // 填充缺失的日期

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { questions, calculateDimensionScores } from "@/lib/maia2-questions";
@@ -9,7 +9,14 @@ interface Answers {
   [questionId: number]: number; // questionId: score (0-5)
 }
 
+interface QuizProgress {
+  currentQuestionIndex: number;
+  answers: Answers;
+  lastSaved: string;
+}
+
 const SCORE_LABELS = ["從不", "很少", "偶爾", "有時", "經常", "總是"];
+const CACHE_KEY = "maia2_quiz_progress";
 
 export default function QuizPage() {
   const router = useRouter();
@@ -18,10 +25,68 @@ export default function QuizPage() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showRestoreDialog, setShowRestoreDialog] = useState(false);
+  const [cachedProgress, setCachedProgress] = useState<QuizProgress | null>(null);
 
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
   const selectedScore = answers[currentQuestion.id];
+
+  // 頁面加載時檢查是否有緩存的進度
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const progress: QuizProgress = JSON.parse(cached);
+        // 檢查緩存是否有效（有答案且未完成）
+        if (progress.answers && Object.keys(progress.answers).length > 0) {
+          setCachedProgress(progress);
+          setShowRestoreDialog(true);
+        }
+      }
+    } catch (error) {
+      console.error("讀取緩存失敗:", error);
+    }
+  }, []);
+
+  // 自動保存進度到 localStorage
+  useEffect(() => {
+    // 只在有答案且未完成時保存
+    if (Object.keys(answers).length > 0 && !isCompleted) {
+      try {
+        const progress: QuizProgress = {
+          currentQuestionIndex,
+          answers,
+          lastSaved: new Date().toISOString(),
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(progress));
+      } catch (error) {
+        console.error("保存進度失敗:", error);
+      }
+    }
+  }, [answers, currentQuestionIndex, isCompleted]);
+
+  // 恢復之前的進度
+  const handleRestoreProgress = () => {
+    if (cachedProgress) {
+      setAnswers(cachedProgress.answers);
+      setCurrentQuestionIndex(cachedProgress.currentQuestionIndex);
+      setShowRestoreDialog(false);
+    }
+  };
+
+  // 重新開始（清除緩存）
+  const handleStartNew = () => {
+    try {
+      localStorage.removeItem(CACHE_KEY);
+      setShowRestoreDialog(false);
+      setCachedProgress(null);
+      setAnswers({});
+      setCurrentQuestionIndex(0);
+    } catch (error) {
+      console.error("清除緩存失敗:", error);
+    }
+  };
 
   // 處理分數選擇
   const handleScoreSelect = (score: number) => {
@@ -63,6 +128,13 @@ export default function QuizPage() {
     };
     localStorage.setItem("maia2_result", JSON.stringify(resultData));
 
+    // 清除進度緩存（測驗已完成）
+    try {
+      localStorage.removeItem(CACHE_KEY);
+    } catch (error) {
+      console.error("清除緩存失敗:", error);
+    }
+
     // 如果有填email，提交到伺服器
     if (email.trim()) {
       setIsSubmitting(true);
@@ -89,6 +161,61 @@ export default function QuizPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* 恢復進度對話框 */}
+      {showRestoreDialog && cachedProgress && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-card rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl animate-fade-in">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg
+                  className="w-8 h-8 text-blue-600 dark:text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-xl md:text-2xl font-bold mb-2">
+                發現未完成的測驗
+              </h2>
+              <p className="text-foreground/70 text-sm md:text-base mb-1">
+                您有一個尚未完成的測驗進度
+              </p>
+              <p className="text-foreground/60 text-xs md:text-sm">
+                已完成 {Object.keys(cachedProgress.answers).length} / {questions.length} 題
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={handleRestoreProgress}
+                className="w-full px-6 py-3 bg-foreground text-background rounded-lg
+                         hover:opacity-90 transition-opacity font-semibold"
+              >
+                繼續上次的測驗
+              </button>
+              <button
+                onClick={handleStartNew}
+                className="w-full px-6 py-3 border-2 border-foreground/20 rounded-lg
+                         hover:bg-foreground/5 transition-colors font-semibold"
+              >
+                重新開始測驗
+              </button>
+            </div>
+
+            <p className="mt-4 text-xs text-center text-foreground/60">
+              提示：系統會自動保存您的答題進度
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* 導航欄 */}
       <nav className="bg-card border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-3 md:px-4 py-3 md:py-4">
@@ -115,7 +242,7 @@ export default function QuizPage() {
               <h1 className="text-2xl md:text-4xl font-bold mb-2">
                 MAIA-2 內感受量表
               </h1>
-              <p className="text-foreground/70 text-base md:text-lg">
+              <p className="text-foreground/70 text-sm md:text-lg">
                 一份描繪「我與身體關係」的 8 個面向量表
               </p>
               <p className="text-xs md:text-sm text-foreground/60 mt-2">
@@ -264,7 +391,7 @@ export default function QuizPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="請輸入您的電子郵件"
                   required
-                  className="w-full px-3 md:px-4 py-2.5 md:py-3 rounded-lg border-2 border-border focus:border-primary
+                  className="w-full text-black px-3 md:px-4 py-2.5 md:py-3 rounded-lg border-2 border-border focus:border-primary
                            focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all mb-5 md:mb-6 text-sm md:text-base"
                 />
 

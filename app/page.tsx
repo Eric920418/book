@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
+import ParticleEffect from "@/components/ParticleEffect";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#F5F5F5] flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-[#F5F5F5] flex flex-col relative overflow-hidden scroll-smooth">
       {/* 淡淡的波浪背景 */}
       <div className="absolute inset-0 top-[-70%] pointer-events-none z-0">
         <svg
@@ -20,6 +21,8 @@ export default function Home() {
         </svg>
       </div>
 
+      {/* 粒子效果 */}
+      <ParticleEffect />
 
       {/* 主視覺區域 */}
       <main className="flex-1 flex items-center justify-center px-4 md:px-8 py-8 md:py-24 relative z-10">
@@ -55,9 +58,9 @@ export default function Home() {
 
           {/* CTA 按鈕 */}
           <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center items-center pt-6 md:pt-20 w-full">
-            <Link
-              href="/guide"
-              className="group flex items-center gap-2 md:gap-3 bg-black text-white px-5 md:px-8 py-3 md:py-4 rounded-lg hover:bg-gray-800 transition-all font-medium text-sm md:text-lg w-full md:min-w-[280px] md:w-auto justify-center"
+            <a
+              href="#audio-guide"
+              className="group flex items-center gap-2 md:gap-3 bg-black text-white px-5 md:px-8 py-3 md:py-4 rounded-lg hover:bg-gray-800 transition-all font-medium text-sm md:text-lg w-full md:min-w-[280px] md:w-auto justify-center cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -73,8 +76,8 @@ export default function Home() {
                   d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
                 />
               </svg>
-              開始 13 分鐘導引
-            </Link>
+              開始 17 分鐘導引
+            </a>
             <Link
               href="/quiz"
               className="group flex items-center gap-2 md:gap-3 bg-white text-black px-5 md:px-8 py-3 md:py-4 rounded-lg border-2 border-gray-300 hover:border-gray-900 hover:bg-gray-50 transition-all font-medium text-sm md:text-lg w-full md:min-w-[280px] md:w-auto justify-center"
@@ -175,7 +178,7 @@ export default function Home() {
       </section>
 
       {/* 第三區塊：音頻播放器 */}
-      <section className="py-8 md:py-20 px-4 md:px-8 relative z-10 bg-white">
+      <section id="audio-guide" className="py-8 md:py-20 px-4 md:px-8 relative z-10 bg-white scroll-mt-20">
         <div className="max-w-3xl mx-auto">
           <div className="bg-[#F9F9F9] rounded-xl md:rounded-3xl p-5 md:p-12 shadow-sm">
             {/* 標題 */}
@@ -253,22 +256,21 @@ export default function Home() {
               </div>
 
               {/* 開始按鈕 */}
-              <Link
-                href="/guide"
+              <div
                 className="block w-full bg-black text-white text-center py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-gray-800 transition-all font-medium text-base md:text-lg mb-4 md:mb-6"
               >
                 <div className="flex items-center justify-center gap-2">
                   <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z"/>
                   </svg>
-                  <span>開始13分鐘導引</span>
+                  <span>開始17分鐘導引</span>
                 </div>
-              </Link>
+              </div>
 
               {/* 說明書按鈕 */}
               <div className="flex gap-3 md:gap-4">
                 <Link
-                  href="/guide/manual-simple"
+                  href="/manual-simple"
                   className="flex-1 flex items-center justify-center gap-1.5 md:gap-2 border-2 border-gray-900 text-gray-900 py-2.5 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-all font-medium text-sm md:text-base"
                 >
                   <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -277,7 +279,7 @@ export default function Home() {
                   <span>精簡版說明書</span>
                 </Link>
                 <Link
-                  href="/guide/manual-full"
+                  href="/manual-full"
                   className="flex-1 flex items-center justify-center gap-1.5 md:gap-2 border-2 border-gray-900 text-gray-900 py-2.5 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-all font-medium text-sm md:text-base"
                 >
                   <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -9,7 +9,59 @@ export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isChecking, setIsChecking] = useState(true)
   const [error, setError] = useState('')
+
+  // 安全的 Base64URL 解碼函數（與 dashboard 相同）
+  const base64UrlDecode = (str: string): string => {
+    let base64 = str.replace(/-/g, '+').replace(/_/g, '/')
+    const padding = (4 - (base64.length % 4)) % 4
+    base64 += '='.repeat(padding)
+    return atob(base64)
+  }
+
+  // 檢查現有的 token
+  useEffect(() => {
+    const checkExistingAuth = async () => {
+      try {
+        const token = localStorage.getItem('adminToken')
+
+        if (!token) {
+          setIsChecking(false)
+          return
+        }
+
+        // 驗證 token 格式
+        const parts = token.split('.')
+        if (parts.length !== 3) {
+          throw new Error('Token 格式錯誤')
+        }
+
+        // 解析 payload
+        const decodedString = base64UrlDecode(parts[1])
+        const payload = JSON.parse(decodedString)
+
+        // 檢查必要欄位
+        if (!payload.email || !payload.name) {
+          throw new Error('Token 內容不完整')
+        }
+
+        // 檢查是否過期
+        if (payload.exp && payload.exp * 1000 < Date.now()) {
+          throw new Error('Token 已過期')
+        }
+
+        // Token 有效，跳轉到 dashboard
+        router.push('/admin/dashboard')
+      } catch (error) {
+        // Token 無效，清除並留在登入頁
+        localStorage.removeItem('adminToken')
+        setIsChecking(false)
+      }
+    }
+
+    checkExistingAuth()
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,6 +90,18 @@ export default function AdminLoginPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // 檢查登入狀態時顯示載入畫面
+  if (isChecking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+          <p className="text-foreground/70">檢查登入狀態...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -69,7 +133,7 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-border focus:border-primary 
+                className="w-full text-black px-4 py-3 rounded-lg border border-border focus:border-primary 
                          focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 placeholder="admin@example.com"
               />
@@ -85,7 +149,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-border focus:border-primary 
+                className="w-full text-black px-4 py-3 rounded-lg border border-border focus:border-primary 
                          focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 placeholder="••••••••"
               />
