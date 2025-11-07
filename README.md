@@ -3,13 +3,14 @@
 > **一本書 × 一段導引 × 一份量表**
 > 使用 Next.js 15、Tailwind CSS v3、PostgreSQL 和 Chart.js 建立的書籍行銷網站
 
-**專案狀態 (2025-11-06)**
+**專案狀態 (2025-11-07)**
 ✅ 首頁極簡主視覺設計完成
 ✅ Quiz 頁面響應式修復完成
 ✅ 精簡版說明書卡片式設計完成 (13分鐘版本)
 ✅ 完整版說明書介紹頁面設計完成 (17分鐘版本)
 ✅ 首頁新增輕量級粒子飄動效果 (純 CSS 動畫)
-⚠️ 需手動添加音檔 `public/audio/guide-13min.mp3` 和 `guide-17min.mp3`
+✅ 首頁音頻播放器功能完整實現 (支援播放、暫停、進度條、快進快退)
+✅ 音檔已添加：`public/audio/音樂3fix_回到身體MIX.wav` (17分鐘導引)
 
 ---
 
@@ -90,11 +91,11 @@ cd book-showcase
 pnpm install
 ```
 
-### 3. 添加音頻檔案 (必需)
-```bash
-# 檔案名稱必須是 guide-13min.mp3
-cp your-audio-file.mp3 public/audio/guide-13min.mp3
-```
+### 3. 音頻檔案
+音檔已包含在專案中：
+- `public/audio/音樂3fix_回到身體MIX.wav` (204MB, 17分鐘導引)
+- 支援 WAV 格式大文件播放
+- 若需更換音檔，請將新音檔放置在 `public/audio/` 並更新 `components/AudioGuidePlayer.tsx` 中的路徑
 
 ### 4. 環境設定 (選填 - 用於後台管理)
 ```bash
@@ -319,8 +320,7 @@ book-showcase/
 │   └── schema.prisma        # Prisma Schema
 ├── public/                   # 靜態資源
 │   └── audio/               # 音頻檔案目錄
-│       ├── guide-13min.mp3  # 13分鐘導引音檔 (需自行添加)
-│       └── README.md        # 音頻檔案說明
+│       └── 音樂3fix_回到身體MIX.wav  # 17分鐘導引音檔 (204MB)
 ├── scripts/                  # 工具腳本 (選填)
 │   └── init-db.ts           # 資料庫初始化
 └── types/                    # TypeScript 類型定義
@@ -360,8 +360,10 @@ book-showcase/
 
 ### 📌 必需檔案
 
-- **音頻檔案** (必需)：將 13 分鐘導引音檔命名為 `guide-13min.mp3`,放置在 `public/audio/` 目錄下
-  - 建議格式：MP3, 128kbps, 約 10-20MB
+- **音頻檔案**：已包含 17 分鐘導引音檔 `音樂3fix_回到身體MIX.wav`
+  - 格式：WAV (無損音質)
+  - 大小：204MB
+  - 位置：`public/audio/音樂3fix_回到身體MIX.wav`
 - **Favicon 圖標**：使用 `/public/right_white_half.png` 作為網站圖標 (已在 `app/layout.tsx` 中配置)
 
 ### 🔒 隱私保護
@@ -377,6 +379,64 @@ book-showcase/
 ---
 
 ## 更新日誌
+
+### 2025-11-07 - 首頁音頻播放器功能完整實現
+
+**AudioGuidePlayer 組件開發**
+- ✅ 創建全新的音頻播放器組件 `components/AudioGuidePlayer.tsx`
+- ✅ 完美保留首頁原有的精美UI設計（灰色背景、圓角卡片、Material Design 圖標）
+- ✅ 核心播放功能：
+  - 播放/暫停控制（中央大按鈕）
+  - 音頻進度條（可拖動跳轉）
+  - 實時時間顯示（當前時間 / 總時長）
+  - 快退10秒按鈕
+  - 快進10秒按鈕
+  - 重新開始按鈕
+  - 音量圖標顯示
+- ✅ 多重事件監聽確保時長正確加載：
+  - `loadedmetadata` - metadata載入時
+  - `loadeddata` - 數據載入時
+  - `canplay` - 可播放時
+  - `durationchange` - 時長改變時
+  - `timeupdate` - 播放進度更新時
+- ✅ 針對大文件（204MB WAV）優化：
+  - 組件掛載時立即檢查 readyState
+  - 播放開始後延遲100ms再次嘗試獲取時長
+  - 在 timeupdate 事件中持續檢查時長
+- ✅ 完整的錯誤處理與用戶提示
+- ✅ 響應式設計適配手機和桌面
+- ✅ 音頻結束自動停止播放
+- 📝 檔案：`components/AudioGuidePlayer.tsx`, `app/page.tsx:4,182`
+
+**音頻文件整合**
+- ✅ 音檔路徑：`/audio/音樂3fix_回到身體MIX.wav`
+- ✅ 文件大小：204MB (WAV 無損格式)
+- ✅ 時長：約17分鐘
+- ✅ 支援瀏覽器原生 HTML5 Audio API
+- 📝 檔案：`public/audio/音樂3fix_回到身體MIX.wav`
+
+**首頁整合與優化**
+- ✅ 將靜態音頻播放器UI替換為功能完整的 AudioGuidePlayer 組件
+- ✅ 保持原有區塊ID `#audio-guide` 確保跳轉功能正常
+- ✅ 保留所有原有設計元素：說明文字、提示框、說明書按鈕
+- ✅ 代碼精簡：從119行靜態UI優化為2行組件調用
+- 📝 檔案：`app/page.tsx:182`
+
+**用戶體驗改善**
+- ✅ 點擊「開始17分鐘導引」按鈕即可播放音頻
+- ✅ 播放時按鈕文字變為「暫停導引」
+- ✅ 進度條實時更新顯示播放進度
+- ✅ 支援拖動進度條快速跳轉
+- ✅ 快進/快退按鈕方便重複練習特定段落
+- ✅ 音頻播放結束自動停止
+
+**技術亮點**
+- 使用 React Hooks (`useState`, `useRef`, `useEffect`)
+- TypeScript 類型安全
+- 客戶端組件 (`'use client'`)
+- 優雅的錯誤處理和用戶反饋
+- 多事件監聽策略確保大文件正確加載
+- Console 日誌輔助調試
 
 ### 2025-11-07 - 完善後台錯誤處理與顯示
 
