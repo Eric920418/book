@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -16,7 +16,7 @@ import {
   ArcElement,
   Filler
 } from 'chart.js'
-import { Line, Bar, Pie } from 'react-chartjs-2'
+import { Line, Bar } from 'react-chartjs-2'
 
 // 註冊 Chart.js 組件
 ChartJS.register(
@@ -65,19 +65,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [results, setResults] = useState<MAIA2Result[]>([])
-  const [adminName, setAdminName] = useState('')
   const [authError, setAuthError] = useState<string>('')
-
-  useEffect(() => {
-    // 順序執行：先驗證 token，成功後才載入資料
-    const init = async () => {
-      const isValid = await checkAuth()
-      if (isValid) {
-        await fetchDashboardData()
-      }
-    }
-    init()
-  }, [])
 
   // 安全的 Base64URL 解碼函數
   const base64UrlDecode = (str: string): string => {
@@ -96,7 +84,7 @@ export default function AdminDashboard() {
     }
   }
 
-  const checkAuth = async (): Promise<boolean> => {
+  const checkAuth = useCallback(async (): Promise<boolean> => {
     const token = localStorage.getItem('adminToken')
     if (!token) {
       router.push('/admin')
@@ -158,7 +146,6 @@ export default function AdminDashboard() {
         )
       }
 
-      setAdminName(payload.name)
       setAuthError('')
       return true // 驗證成功
     } catch (error) {
@@ -186,9 +173,9 @@ export default function AdminDashboard() {
 
       return false // 驗證失敗
     }
-  }
+  }, [router])
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       const token = localStorage.getItem('adminToken')
 
@@ -236,7 +223,18 @@ export default function AdminDashboard() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    // 順序執行：先驗證 token，成功後才載入資料
+    const init = async () => {
+      const isValid = await checkAuth()
+      if (isValid) {
+        await fetchDashboardData()
+      }
+    }
+    init()
+  }, [checkAuth, fetchDashboardData])
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken')

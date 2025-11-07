@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import nodemailer from 'nodemailer'
-import { dimensions, type DimensionKey } from '@/lib/maia2-questions'
+import { dimensions } from '@/lib/maia2-questions'
 
 // MAIA-2 結果驗證 schema
 const submitMaia2Schema = z.object({
@@ -33,8 +33,7 @@ const transporter = isEmailConfigured
 // 生成 MAIA-2 結果的 HTML 郵件
 function generateMaia2EmailHtml(
   dimensionScores: Record<string, number>,
-  siteUrl: string,
-  resultId: string
+  siteUrl: string
 ): string {
   const dimensionRows = dimensions
     .map(
@@ -160,8 +159,7 @@ export async function POST(request: NextRequest) {
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         const emailHtml = generateMaia2EmailHtml(
           validatedData.resultData,
-          siteUrl,
-          result.id
+          siteUrl
         )
 
         await transporter.sendMail({

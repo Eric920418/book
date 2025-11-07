@@ -11,7 +11,7 @@ export function verifyToken(token: string): JWTPayload | null {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as JWTPayload
     return decoded
-  } catch (error) {
+  } catch {
     return null
   }
 }

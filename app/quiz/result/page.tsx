@@ -13,7 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { dimensions, getDimensionName, type DimensionKey } from "@/lib/maia2-questions";
+import { dimensions, type DimensionKey } from "@/lib/maia2-questions";
 
 // 註冊 Chart.js 組件
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);

@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
 
         // Token 有效，跳轉到 dashboard
         router.push('/admin/dashboard')
-      } catch (error) {
+      } catch {
         // Token 無效，清除並留在登入頁
         localStorage.removeItem('adminToken')
         setIsChecking(false)
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
       } else {
         setError(data.error || '登入失敗')
       }
-    } catch (error) {
+    } catch {
       setError('發生錯誤，請稍後再試')
     } finally {
       setIsLoading(false)

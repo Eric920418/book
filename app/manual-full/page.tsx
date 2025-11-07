@@ -384,7 +384,7 @@ export default function ManualFullPage() {
                 </h2>
               </div>
               <div className="space-y-3 md:space-y-4 text-sm md:text-base text-gray-700 leading-relaxed">
-                <p>每日 5–10 分鐘（完整 17' 皆可）。</p>
+                <p>每日 5–10 分鐘（完整 17&apos; 皆可）。</p>
                 <p>連續 4 週最有感，規律勝過長度。</p>
                 <div className="flex items-start gap-2 bg-black text-white p-3 md:p-4 rounded-lg">
                   <span className="flex-shrink-0 text-base md:text-lg font-bold">
@@ -527,7 +527,7 @@ export default function ManualFullPage() {
                 <div>
                   <p className="font-semibold text-black mb-2">每週重整：</p>
                   <p>
-                    重讀畫線段 3–5' → 完整導引 17' → 依「當下／兩週／四週」各寫一句觀察。
+                    重讀畫線段 3–5&apos; → 完整導引 17&apos; → 依「當下／兩週／四週」各寫一句觀察。
                   </p>
                 </div>
                 <div>

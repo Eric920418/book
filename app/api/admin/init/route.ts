@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { hashPassword } from '@/lib/auth/password'
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // 檢查是否已有管理員
     const existingAdmin = await prisma.admin.findFirst()
