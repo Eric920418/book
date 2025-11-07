@@ -249,7 +249,7 @@ export default function AudioGuidePlayer() {
 
             {/* 說明文字 */}
             <div className="text-center space-y-2 md:space-y-3 mb-5 md:mb-8">
-              <p className="text-sm md:text-lg text-gray-700">10 - 13分鐘身心學導引。</p>
+              <p className="text-sm md:text-lg text-gray-700">10 - 17分鐘身心學導引。</p>
               <p className="text-xs md:text-base text-gray-600">讓呼吸變長、身體安定；神經回到節奏。</p>
             </div>
 

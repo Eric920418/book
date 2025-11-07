@@ -202,7 +202,7 @@ export default function ResultPage() {
           <div className="bg-card rounded-2xl p-8">
             <h3 className="text-xl font-semibold mb-4">🎧 每日練習</h3>
             <p className="text-foreground/70 mb-6">
-              搭配 13 分鐘身心學導引，讓這些面向逐步穩定成長。
+              搭配 17 分鐘身心學導引，讓這些面向逐步穩定成長。
             </p>
             <Link
               href="/guide"

@@ -19,7 +19,7 @@ export default function ManualSimplePage() {
           {/* 標題區域 - 置中 */}
           <div className="text-center mb-8 md:mb-12">
             <h1 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8 text-black">
-              13 分鐘身心學導引｜精簡版說明書
+              17 分鐘身心學導引｜精簡版說明書
             </h1>
             <p className="text-base md:text-xl text-gray-600">
               Somatics × Polyvagal × Somatic Experiencing

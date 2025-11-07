@@ -106,7 +106,7 @@ function generateMaia2EmailHtml(
 
           <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #e5e7eb;">
             <p style="text-align: center; color: #6b7280; font-size: 14px; margin-bottom: 15px;">
-              建議每日搭配 13 分鐘身心學導引練習
+              建議每日搭配 17 分鐘身心學導引練習
             </p>
             <div style="text-align: center;">
               <a href="${siteUrl}/guide"
