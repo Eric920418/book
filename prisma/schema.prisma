@@ -1,6 +1,3 @@
-// Prisma schema for MAIA-2 內感受量表系統
-// 《你不是破碎，而是入口》書籍網站
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,16 +7,95 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 管理員資料表
 model Admin {
   id        String   @id @default(cuid())
   email     String   @unique
-  password  String   // 使用 bcrypt 雜湊
+  password  String
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
 
-  @@map("admins")
+model Answer {
+  id         String     @id
+  resultId   String
+  optionId   String
+  createdAt  DateTime   @default(now())
+  Option     Option     @relation(fields: [optionId], references: [id])
+  QuizResult QuizResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+  @@unique([resultId, optionId])
+}
+
+model Author {
+  id        String   @id
+  name      String
+  biography String
+  photo     String?
+  email     String?
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Book      Book[]
+}
+
+model Book {
+  id          String    @id
+  title       String
+  description String
+  coverImage  String?
+  audioUrl    String?
+  publishDate DateTime?
+  isbn        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+  authorId    String
+  Author      Author    @relation(fields: [authorId], references: [id])
+}
+
+model Option {
+  id         String   @id
+  text       String
+  score      Int      @default(0)
+  order      Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  questionId String
+  Answer     Answer[]
+  Question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model Question {
+  id        String   @id
+  text      String
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  quizId    String
+  Option    Option[]
+  Quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model Quiz {
+  id          String       @id
+  title       String
+  description String?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime
+  Question    Question[]
+  QuizResult  QuizResult[]
+}
+
+model QuizResult {
+  id         String   @id
+  email      String
+  totalScore Int
+  resultData Json
+  createdAt  DateTime @default(now())
+  quizId     String
+  Answer     Answer[]
+  Quiz       Quiz     @relation(fields: [quizId], references: [id])
 }
 
 // MAIA-2 測驗結果資料表
@@ -44,14 +120,3 @@ model MAIA2Result {
   @@index([createdAt])
   @@map("maia2_results")
 }
-
-// 未來擴展：如果需要記錄詳細的 37 題答案，可以新增以下 model
-// model MAIA2Answer {
-//   id          String       @id @default(cuid())
-//   result      MAIA2Result  @relation(fields: [resultId], references: [id], onDelete: Cascade)
-//   resultId    String
-//   questionId  Int          // 1-37
-//   score       Int          // 0-5（原始分數，不含反向計分）
-//   createdAt   DateTime     @default(now())
-//   @@map("maia2_answers")
-// }
