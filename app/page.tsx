@@ -171,8 +171,8 @@ export default function Home() {
             </div>
             <div className="text-xs md:text-sm leading-relaxed md:leading-loose space-y-1">
               <p>謝謝你，成為最早相信、最早同行的人。</p>
-              <p>這份早鳥讀，不是更多，而是更早一點— 更早感受書的光、更近他走進療癒的開始。</p>
-              <p>你是讓這本書成為的人， 也是我最想帶手送出這稿的一群人。</p>
+              <p>這份早鳥讀，不是「更多」，而是「更早一點」— 更早感受書的光、更近地走進療癒的開始。</p>
+              <p>你是讓這本書成為可能的人， 也是我最想親手送出這份禮的一群人。</p>
             </div>
           </div>
         </div>
@@ -232,8 +232,8 @@ export default function Home() {
 
             {/* 底部說明文字 */}
             <div className="text-gray-600 text-xs md:text-sm space-y-1 md:space-y-2">
-              <p>建議弟一次作為基線，4-8周後再重測。</p>
-              <p>本階段部留存資料，結果只在你的裝置顯示。</p>
+              <p>建議第一次作為基線，4-8周後再重測。</p>
+              <p>本階段不留存資料，結果只在你的裝置顯示。</p>
             </div>
           </div>
         </div>
