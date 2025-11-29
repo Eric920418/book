@@ -8,7 +8,8 @@
       "Bash(sudo nginx:*)",
       "Bash(chmod:*)",
       "Bash(npx prisma generate:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(curl -o momo-logo.png \"https://image.momoshop.com.tw/ecm/img/online/10/998/00/000/bt_0_243_01/bt_0_243_01_e2.png?t=002932323\")"
     ],
     "deny": [],
     "ask": []

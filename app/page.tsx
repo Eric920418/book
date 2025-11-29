@@ -265,7 +265,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* 博客來 */}
               <a
-                href="https://www.books.com.tw/search?query=你不是破碎而是入口"
+                href="https://www.books.com.tw/products/0011037256?utm_source=www&utm_medium=share&utm_content=line&utm_campaign=product&utm_term=0011037256"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center bg-white border-2 border-gray-300 py-4 px-6 rounded-xl hover:border-gray-900 hover:bg-gray-50 transition-all"
@@ -281,7 +281,7 @@ export default function Home() {
 
               {/* 誠品線上 */}
               <a
-                href="https://www.eslite.com/Search?keyword=你不是破碎而是入口"
+                href="https://www.eslite.com/product/10012011762683037519004"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center bg-white border-2 border-gray-300 py-4 px-6 rounded-xl hover:border-gray-900 hover:bg-gray-50 transition-all"
@@ -295,37 +295,36 @@ export default function Home() {
                 />
               </a>
 
-              {/* 讀冊生活 */}
+              {/* 金石堂 */}
               <a
-                href="https://www.taaze.tw/search.html?keyword=你不是破碎而是入口"
+                href="https://www.kingstone.com.tw/basic/2014190093306/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center bg-white border-2 border-gray-300 py-4 px-6 rounded-xl hover:border-gray-900 hover:bg-gray-50 transition-all"
               >
                 <Image
-                  src="/image 9.png"
-                  alt="讀冊生活"
+                  src="/kingstone-logo.svg"
+                  alt="金石堂"
                   width={200}
                   height={50}
                   className="h-8 w-auto"
                 />
               </a>
 
-              {/* 出版社 */}
+              {/* momo購物網 */}
               <a
-                href="#"
+                href="https://momo.dm/7yVRVm"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 bg-white border-2 border-gray-300 py-4 px-6 rounded-xl hover:border-gray-900 hover:bg-gray-50 transition-all"
+                className="flex items-center justify-center bg-white border-2 border-gray-300 py-4 px-6 rounded-xl hover:border-gray-900 hover:bg-gray-50 transition-all"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gray-800 rounded flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                    </svg>
-                  </div>
-                  <span className="text-gray-900 font-medium text-lg">出版社</span>
-                </div>
+                <Image
+                  src="/momo-logo.png"
+                  alt="momo購物網"
+                  width={200}
+                  height={50}
+                  className="h-8 w-auto"
+                />
               </a>
             </div>
           </div>
