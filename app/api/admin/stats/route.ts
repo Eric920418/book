@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
     dimensions.forEach(dim => {
       const scores = allResults
         .map((r: { dimensionScores: unknown; createdAt: Date }) => (r.dimensionScores as Record<string, number>)[dim.key])
-        .filter((score): score is number => score !== undefined && score !== null)
+        .filter((score: number | undefined | null): score is number => score !== undefined && score !== null)
 
       const avg = scores.length > 0
         ? scores.reduce((sum, score) => sum + score, 0) / scores.length
