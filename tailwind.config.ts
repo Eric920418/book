@@ -43,6 +43,19 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        snowfall: {
+          '0%': {
+            transform: 'translateY(-10px) translateX(0)',
+          },
+          '100%': {
+            transform: 'translateY(100vh) translateX(var(--horizontal-move, 0px))',
+          },
+        },
+      },
+      animation: {
+        snowfall: 'snowfall linear infinite',
+      },
     },
   },
   plugins: [],

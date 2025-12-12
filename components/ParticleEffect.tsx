@@ -34,29 +34,19 @@ export default function ParticleEffect() {
       {particles.map((particle) => (
         <div
           key={particle.id}
-          className="absolute top-0 rounded-full"
+          className="absolute top-0 rounded-full animate-snowfall"
           style={{
             left: particle.left,
             width: `${particle.size}px`,
             height: `${particle.size}px`,
             opacity: particle.opacity,
             backgroundColor: '#808080',
-            animation: `fall-${particle.id} ${particle.duration}s linear ${particle.delay}s infinite`,
+            animationDuration: `${particle.duration}s`,
+            animationDelay: `${particle.delay}s`,
+            ['--horizontal-move' as string]: `${particle.horizontalMove}px`,
           }}
         />
       ))}
-      <style jsx>{`
-        ${particles.map((particle) => `
-          @keyframes fall-${particle.id} {
-            0% {
-              transform: translateY(-10px) translateX(0);
-            }
-            100% {
-              transform: translateY(100vh) translateX(${particle.horizontalMove}px);
-            }
-          }
-        `).join('')}
-      `}</style>
     </div>
   );
 }
