@@ -11,7 +11,7 @@ export default function AudioGuidePlayer() {
   const audioRef = useRef<HTMLAudioElement>(null)
 
   // 音檔路徑
-  const audioSrc = '/audio/音樂3fix_回到身體MIX.wav'
+  const audioSrc = '/audio/guide.mp3'
 
   // 更新進度
   useEffect(() => {
