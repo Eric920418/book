@@ -1,0 +1,20 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="300" height="300" fill="#e5e7eb"/>
+
+  <!-- 頭部輪廓 -->
+  <circle cx="150" cy="120" r="50" fill="#9ca3af"/>
+
+  <!-- 身體輪廓 -->
+  <ellipse cx="150" cy="240" rx="80" ry="60" fill="#9ca3af"/>
+
+  <!-- 文字 -->
+  <text x="150" y="270" font-family="Arial, sans-serif" font-size="16"
+        text-anchor="middle" fill="#6b7280">
+    趙耕樂
+  </text>
+  <text x="150" y="290" font-family="Arial, sans-serif" font-size="12"
+        text-anchor="middle" fill="#9ca3af">
+    [作者照片佔位符]
+  </text>
+</svg>

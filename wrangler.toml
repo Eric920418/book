@@ -1,0 +1,38 @@
+# Cloudflare Workers 配置檔
+name = "book-showcase"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# 主入口點（由 OpenNext 自動生成）
+main = ".open-next/worker.js"
+
+# 資產目錄
+assets = { directory = ".open-next/assets", binding = "ASSETS" }
+
+# D1 資料庫綁定
+[[d1_databases]]
+binding = "DB"
+database_name = "book-showcase-db"
+database_id = "cac1a3ad-a7a3-4de7-b781-f6696a63358e"
+
+# 環境變數（敏感資訊請使用 wrangler secret）
+[vars]
+NEXT_PUBLIC_SITE_URL = "https://book-showcase.pages.dev"
+
+# 開發環境設定
+[env.preview]
+name = "book-showcase-preview"
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "book-showcase-db"
+database_id = "cac1a3ad-a7a3-4de7-b781-f6696a63358e"
+
+# 生產環境設定
+[env.production]
+name = "book-showcase"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "book-showcase-db"
+database_id = "cac1a3ad-a7a3-4de7-b781-f6696a63358e"

@@ -62,15 +62,16 @@
 
 | 技術 | 版本 | 用途 |
 |------|------|------|
-| Next.js | 15.5.6 | 前端框架 (App Router) |
-| React | 19+ | UI 組件 |
-| TypeScript | 5.9.3 | 類型安全 |
+| Next.js | 16.0.10 | 前端框架 (App Router + Turbopack) |
+| React | 19.2.1 | UI 組件 |
+| TypeScript | 5.x | 類型安全 |
 | Tailwind CSS | 3.4.18 | 樣式系統 |
-| PostgreSQL | - | 資料庫 (選填) |
-| Prisma | 6.17.1 | ORM (選填) |
+| Cloudflare D1 | - | 資料庫 (SQLite 相容) |
+| Prisma | 6.17.1 | ORM + D1 Adapter |
 | Chart.js | - | 雷達圖 |
-| Nodemailer | - | 郵件服務 (選填) |
-| JWT | - | 身份驗證 (選填) |
+| Resend | - | 郵件服務 (Edge 相容) |
+| jose | - | JWT (Edge 相容) |
+| OpenNext | - | Cloudflare 部署 adapter |
 | pnpm | - | 套件管理 (必須) |
 
 **色系設計**：極簡黑白灰
@@ -330,22 +331,90 @@ book-showcase/
 
 ## 部署建議
 
-### 1. Vercel 部署 (推薦)
+### 1. Cloudflare Pages 部署 (推薦)
+
+專案已配置好 Cloudflare 部署，使用 OpenNext adapter + Cloudflare D1 資料庫。
+
+#### 前置準備
+1. 安裝 Cloudflare CLI：`pnpm add -g wrangler`
+2. 登入 Cloudflare：`wrangler login`
+
+#### 建立 D1 資料庫
+```bash
+# 建立資料庫
+pnpm cf:d1:create
+
+# 記下返回的 database_id，填入 wrangler.toml
+```
+
+#### 更新 wrangler.toml
+將 `wrangler.toml` 中的 `database_id = ""` 替換為實際的 database_id。
+
+#### 初始化資料庫
+```bash
+# 本地測試用
+pnpm cf:d1:migrate
+
+# 生產環境
+pnpm cf:d1:migrate:prod
+```
+
+#### 設定環境變數 (Secrets)
+```bash
+# 使用 wrangler 設定敏感資訊
+wrangler secret put JWT_SECRET
+wrangler secret put RESEND_API_KEY
+wrangler secret put NEXTAUTH_SECRET
+```
+
+#### 部署
+```bash
+# 本地預覽
+pnpm cf:preview
+
+# 部署到 Cloudflare
+pnpm cf:deploy
+```
+
+#### Cloudflare 相關指令
+| 指令 | 說明 |
+|------|------|
+| `pnpm cf:build` | 使用 OpenNext 建置 |
+| `pnpm cf:dev` | 本地開發模式 |
+| `pnpm cf:preview` | 建置並本地預覽 |
+| `pnpm cf:deploy` | 建置並部署到 Cloudflare |
+| `pnpm cf:d1:create` | 建立 D1 資料庫 |
+| `pnpm cf:d1:migrate` | 執行本地 D1 遷移 |
+| `pnpm cf:d1:migrate:prod` | 執行生產 D1 遷移 |
+
+### 2. Vercel 部署 (替代方案)
 - 一鍵部署 Next.js 應用
 - 自動處理環境變數
 - 無需資料庫即可運行 (前台功能)
+- 注意：需要修改 prisma 設定使用 PostgreSQL
 
-### 2. 資料庫 (選填)
-- Supabase 或 Neon 作為 PostgreSQL 資料庫
-- 僅用於後台管理
+### 3. 資料庫
+- **Cloudflare D1** (推薦)：已配置，SQLite 相容
+- **Supabase / Neon**：PostgreSQL，適合 Vercel 部署
 
-### 3. 郵件服務 (選填)
-- SendGrid、Resend 或其他郵件服務
-- 僅在用戶填寫 Email 時需要
+### 4. 郵件服務
+- **Resend** (推薦)：已配置，Edge Runtime 相容
+- SendGrid、Postmark 等也可透過 API 使用
 
-### 4. 環境變數
-- 設定強密碼
-- 不要將 `.env` 上傳到 Git
+### 5. 環境變數
+```bash
+# 必要
+JWT_SECRET="your-jwt-secret"
+NEXT_PUBLIC_SITE_URL="https://your-domain.com"
+
+# 郵件功能
+RESEND_API_KEY="re_xxxx"
+EMAIL_FROM="noreply@your-domain.com"
+
+# NextAuth (如有使用)
+NEXTAUTH_SECRET="your-secret"
+NEXTAUTH_URL="https://your-domain.com"
+```
 
 ---
 
@@ -379,6 +448,79 @@ book-showcase/
 ---
 
 ## 更新日誌
+
+### 2025-12-12 - Cloudflare 部署支援
+
+**Edge Runtime 遷移**
+- ✅ 新增 `@opennextjs/cloudflare` 部署 adapter
+- ✅ 新增 `wrangler.toml` Cloudflare 配置檔
+- ✅ 新增 Cloudflare D1 資料庫支援
+- ✅ Prisma 新增 `driverAdapters` preview feature
+- ✅ 建立 `prisma/migrations/init.sql` D1 初始化腳本
+
+**Edge 相容套件替換**
+- ✅ `bcryptjs` → Web Crypto API (PBKDF2)
+  - 新增 `lib/auth/password.ts` 使用 Web Crypto
+  - 支援舊版 bcrypt 格式密碼（遷移期間）
+- ✅ `jsonwebtoken` → `jose`
+  - 新增 `lib/auth/jwt.ts` 使用 jose
+  - `verifyToken` 改為非同步函數
+- ✅ `nodemailer` → `resend`
+  - 新增 `lib/email/resend.ts` 使用 Resend API
+  - Edge Runtime 完全相容
+
+**API Routes 更新**
+- ✅ 所有 API routes 新增 `export const runtime = 'edge'`
+- ✅ `verifyToken` 呼叫處全部加上 `await`
+- ✅ 移除 `$queryRaw` 使用（D1 不支援）
+- ✅ 完整錯誤訊息顯示在前端
+
+**新增 Scripts**
+- `pnpm cf:build` - OpenNext 建置
+- `pnpm cf:dev` - Cloudflare 本地開發
+- `pnpm cf:preview` - 本地預覽
+- `pnpm cf:deploy` - 部署到 Cloudflare
+- `pnpm cf:d1:create` - 建立 D1 資料庫
+- `pnpm cf:d1:migrate` - 執行 D1 遷移
+
+**新增檔案**
+- `wrangler.toml` - Cloudflare 配置
+- `lib/auth/jwt.ts` - Edge 相容 JWT
+- `lib/email/resend.ts` - Resend 郵件服務
+- `prisma/migrations/init.sql` - D1 初始化 SQL
+- `.env.example` - 環境變數範例
+
+---
+
+### 2025-12-12 - Next.js 16 + React 19.2.1 升級
+
+**核心框架升級**
+- ✅ Next.js 15.5.6 → 16.0.7
+- ✅ React 19.1.0 → 19.2.1
+- ✅ React-DOM 19.1.0 → 19.2.1
+- ✅ eslint-config-next 15.5.6 → 16.0.7
+
+**Next.js 16 重要變更**
+- ✅ Turbopack 成為預設打包器 (build 速度提升)
+- ✅ `middleware.ts` → `proxy.ts` (本專案無 middleware，無需處理)
+- ✅ `params` 和 `searchParams` 為 Promise (本專案已符合)
+- ✅ Node.js 需要 20.9+ (目前使用 v22.14.0)
+- ✅ TypeScript 需要 5.1+ (目前使用 5.x)
+
+**Tailwind CSS 正常運作**
+- ✅ 所有樣式正確編譯
+- ✅ PostCSS 配置相容
+
+**已知問題**
+- ⚠️ next-auth 4.24.11 尚未支援 Next.js 16 (peer dependency 警告)
+  - 不影響功能運作，等待官方更新
+
+**參考資料**
+- [Next.js 16 發布公告](https://nextjs.org/blog/next-16)
+- [升級指南](https://nextjs.org/docs/app/guides/upgrading/version-16)
+- [middleware 改名為 proxy](https://nextjs.org/docs/messages/middleware-to-proxy)
+
+---
 
 ### 2025-11-07 - 首頁音頻播放器功能完整實現
 
@@ -663,7 +805,8 @@ book-showcase/
 
 ### ✅ Build 狀態：成功
 
-最後 build 時間：2025-10-21
+最後 build 時間：2025-12-12
+使用 Turbopack (Next.js 16 預設打包器)
 
 ### 已修復的問題
 

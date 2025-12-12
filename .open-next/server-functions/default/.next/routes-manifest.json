@@ -1,0 +1,155 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/quiz/result/[id]",
+      "regex": "^/quiz/result/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/quiz/result/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/admin/dashboard",
+      "regex": "^/admin/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard(?:/)?$"
+    },
+    {
+      "page": "/api/admin/init",
+      "regex": "^/api/admin/init(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/init(?:/)?$"
+    },
+    {
+      "page": "/api/admin/results",
+      "regex": "^/api/admin/results(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/results(?:/)?$"
+    },
+    {
+      "page": "/api/admin/stats",
+      "regex": "^/api/admin/stats(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/stats(?:/)?$"
+    },
+    {
+      "page": "/api/auth/login",
+      "regex": "^/api/auth/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/login(?:/)?$"
+    },
+    {
+      "page": "/api/quiz/submit",
+      "regex": "^/api/quiz/submit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/quiz/submit(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/guide/manual-simple",
+      "regex": "^/guide/manual\\-simple(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/guide/manual\\-simple(?:/)?$"
+    },
+    {
+      "page": "/manual-full",
+      "regex": "^/manual\\-full(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/manual\\-full(?:/)?$"
+    },
+    {
+      "page": "/manual-simple",
+      "regex": "^/manual\\-simple(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/manual\\-simple(?:/)?$"
+    },
+    {
+      "page": "/quiz",
+      "regex": "^/quiz(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/quiz(?:/)?$"
+    },
+    {
+      "page": "/quiz/manual",
+      "regex": "^/quiz/manual(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/quiz/manual(?:/)?$"
+    },
+    {
+      "page": "/quiz/result",
+      "regex": "^/quiz/result(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/quiz/result(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

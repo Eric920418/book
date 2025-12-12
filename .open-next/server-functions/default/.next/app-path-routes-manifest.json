@@ -1,0 +1,20 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/admin/dashboard/page": "/admin/dashboard",
+  "/admin/page": "/admin",
+  "/api/admin/init/route": "/api/admin/init",
+  "/api/admin/results/route": "/api/admin/results",
+  "/api/admin/stats/route": "/api/admin/stats",
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/quiz/submit/route": "/api/quiz/submit",
+  "/favicon.ico/route": "/favicon.ico",
+  "/guide/manual-simple/page": "/guide/manual-simple",
+  "/manual-full/page": "/manual-full",
+  "/manual-simple/page": "/manual-simple",
+  "/page": "/",
+  "/quiz/manual/page": "/quiz/manual",
+  "/quiz/page": "/quiz",
+  "/quiz/result/[id]/page": "/quiz/result/[id]",
+  "/quiz/result/page": "/quiz/result"
+}

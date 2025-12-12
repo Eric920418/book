@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getTokenFromRequest, verifyToken } from '@/lib/auth/verify'
 import { dimensions } from '@/lib/maia2-questions'
 
+
 export async function GET(request: NextRequest) {
   try {
     // 驗證管理員身份
@@ -14,7 +15,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const admin = verifyToken(token)
+    // 注意：verifyToken 現在是非同步的
+    const admin = await verifyToken(token)
     if (!admin) {
       return NextResponse.json(
         { success: false, error: '無效的授權' },
@@ -39,7 +41,8 @@ export async function GET(request: NextRequest) {
     // 獲取所有測驗結果，計算各面向的平均分數
     const allResults = await prisma.mAIA2Result.findMany({
       select: {
-        dimensionScores: true
+        dimensionScores: true,
+        createdAt: true
       }
     })
 
@@ -68,18 +71,20 @@ export async function GET(request: NextRequest) {
         score
       }))
 
-    // 獲取過去 7 天的每日測驗數據
+    // 計算過去 7 天的每日測驗數據（不使用 $queryRaw，改用 JavaScript 計算）
     const sevenDaysAgo = new Date()
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6)
     sevenDaysAgo.setHours(0, 0, 0, 0)
 
-    const dailyResultsRaw = await prisma.$queryRaw<{ date: Date; count: bigint }[]>`
-      SELECT DATE("createdAt") as date, COUNT(*) as count
-      FROM "maia2_results"
-      WHERE "createdAt" >= ${sevenDaysAgo}
-      GROUP BY DATE("createdAt")
-      ORDER BY DATE("createdAt")
-    `
+    // 從已獲取的資料中篩選過去 7 天的結果
+    const recentResults = allResults.filter(r => r.createdAt >= sevenDaysAgo)
+
+    // 按日期分組計算
+    const dailyCountMap: Record<string, number> = {}
+    recentResults.forEach(r => {
+      const dateStr = r.createdAt.toISOString().split('T')[0]
+      dailyCountMap[dateStr] = (dailyCountMap[dateStr] || 0) + 1
+    })
 
     // 填充缺失的日期
     const dailyResults = []
@@ -87,15 +92,10 @@ export async function GET(request: NextRequest) {
 
     for (let i = 0; i < 7; i++) {
       const dateStr = currentDate.toISOString().split('T')[0]
-      const found = dailyResultsRaw.find(
-        r => r.date.toISOString().split('T')[0] === dateStr
-      )
-
       dailyResults.push({
         date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}`,
-        count: found ? Number(found.count) : 0
+        count: dailyCountMap[dateStr] || 0
       })
-
       currentDate.setDate(currentDate.getDate() + 1)
     }
 
@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('❌ 獲取統計資料錯誤:', error)
+    console.error('獲取統計資料錯誤:', error)
     return NextResponse.json(
       {
         success: false,

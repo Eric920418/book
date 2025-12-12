@@ -12,7 +12,11 @@
       "Bash(curl -o momo-logo.png \"https://image.momoshop.com.tw/ecm/img/online/10/998/00/000/bt_0_243_01/bt_0_243_01_e2.png?t=002932323\")",
       "Bash(systemctl list-units:*)",
       "Bash(systemctl list-timers:*)",
-      "Bash(sudo systemctl status:*)"
+      "Bash(sudo systemctl status:*)",
+      "Bash(cat:*)",
+      "Bash(pnpm view:*)",
+      "Bash(grep:*)",
+      "Bash(pnpm add:*)"
     ],
     "deny": [],
     "ask": []

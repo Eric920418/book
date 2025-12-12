@@ -1,0 +1,20 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/admin/init/route": "app-edge-has-no-entrypoint",
+  "/api/admin/results/route": "app-edge-has-no-entrypoint",
+  "/api/admin/stats/route": "app-edge-has-no-entrypoint",
+  "/api/auth/login/route": "app-edge-has-no-entrypoint",
+  "/api/quiz/submit/route": "app-edge-has-no-entrypoint",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/guide/manual-simple/page": "app/guide/manual-simple/page.js",
+  "/manual-full/page": "app/manual-full/page.js",
+  "/manual-simple/page": "app/manual-simple/page.js",
+  "/page": "app/page.js",
+  "/quiz/manual/page": "app/quiz/manual/page.js",
+  "/quiz/page": "app/quiz/page.js",
+  "/quiz/result/[id]/page": "app/quiz/result/[id]/page.js",
+  "/quiz/result/page": "app/quiz/result/page.js"
+}

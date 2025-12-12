@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
-import nodemailer from 'nodemailer'
+import { sendEmail, isEmailConfigured } from '@/lib/email/resend'
 import { dimensions } from '@/lib/maia2-questions'
+
 
 // MAIA-2 結果驗證 schema
 const submitMaia2Schema = z.object({
@@ -10,25 +11,6 @@ const submitMaia2Schema = z.object({
   resultData: z.record(z.string(), z.number()), // 8個面向的分數
   completedAt: z.string(),
 })
-
-// 郵件發送設定（僅在配置時啟用）
-const isEmailConfigured = !!(
-  process.env.EMAIL_SERVER_HOST &&
-  process.env.EMAIL_SERVER_USER &&
-  process.env.EMAIL_SERVER_PASSWORD
-)
-
-const transporter = isEmailConfigured
-  ? nodemailer.createTransport({
-      host: process.env.EMAIL_SERVER_HOST,
-      port: parseInt(process.env.EMAIL_SERVER_PORT || '587'),
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_SERVER_USER,
-        pass: process.env.EMAIL_SERVER_PASSWORD,
-      },
-    })
-  : null
 
 // 生成 MAIA-2 結果的 HTML 郵件
 function generateMaia2EmailHtml(
@@ -72,7 +54,7 @@ function generateMaia2EmailHtml(
 
           <div style="background-color: #f3f4f6; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
             <h2 style="color: #111827; font-size: 18px; margin-bottom: 15px;">
-              💡 你的 8 個覺察面向
+              你的 8 個覺察面向
             </h2>
             <table style="width: 100%; border-collapse: collapse;">
               ${dimensionRows}
@@ -111,12 +93,12 @@ function generateMaia2EmailHtml(
             <div style="text-align: center;">
               <a href="${siteUrl}/guide"
                  style="color: #9333ea; text-decoration: none; font-weight: 500;">
-                🎧 開始導引
+                開始導引
               </a>
               <span style="margin: 0 10px; color: #d1d5db;">|</span>
               <a href="https://www.books.com.tw"
                  style="color: #9333ea; text-decoration: none; font-weight: 500;">
-                📚 購買書籍
+                購買書籍
               </a>
             </div>
           </div>
@@ -153,8 +135,9 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // 發送郵件（如果已配置）
-    if (transporter && isEmailConfigured) {
+    // 發送郵件（如果已配置 Resend）
+    let emailSent = false
+    if (isEmailConfigured()) {
       try {
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         const emailHtml = generateMaia2EmailHtml(
@@ -162,20 +145,24 @@ export async function POST(request: NextRequest) {
           siteUrl
         )
 
-        await transporter.sendMail({
-          from: process.env.EMAIL_FROM || process.env.EMAIL_SERVER_USER,
+        const emailResult = await sendEmail({
           to: validatedData.email,
           subject: '你的 MAIA-2 覺察輪廓 - 《你不是破碎，而是入口》',
           html: emailHtml,
         })
 
-        console.log(`✅ 郵件已發送至: ${validatedData.email}`)
+        emailSent = emailResult.success
+        if (emailResult.success) {
+          console.log(`郵件已發送至: ${validatedData.email}`)
+        } else {
+          console.error('郵件發送失敗:', emailResult.error)
+        }
       } catch (emailError) {
-        console.error('❌ 郵件發送失敗:', emailError)
+        console.error('郵件發送時發生錯誤:', emailError)
         // 郵件發送失敗不影響測驗結果的儲存
       }
     } else {
-      console.log('ℹ️ 郵件功能未配置，跳過發送')
+      console.log('郵件功能未配置，跳過發送')
     }
 
     return NextResponse.json({
@@ -183,11 +170,11 @@ export async function POST(request: NextRequest) {
       data: {
         id: result.id,
         message: '測驗結果已儲存',
-        emailSent: isEmailConfigured,
+        emailSent,
       },
     })
   } catch (error) {
-    console.error('❌ 提交測驗結果時發生錯誤:', error)
+    console.error('提交測驗結果時發生錯誤:', error)
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -200,13 +187,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 顯示完整錯誤在前端（依據用戶要求）
+    // 顯示完整錯誤在前端
     return NextResponse.json(
       {
         success: false,
         error: '伺服器錯誤',
         message: error instanceof Error ? error.message : '未知錯誤',
-        stack: process.env.NODE_ENV === 'development' && error instanceof Error ? error.stack : undefined,
       },
       { status: 500 }
     )
