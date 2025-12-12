@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
         .filter((score: number | undefined | null): score is number => score !== undefined && score !== null)
 
       const avg = scores.length > 0
-        ? scores.reduce((sum, score) => sum + score, 0) / scores.length
+        ? scores.reduce((sum: number, score: number) => sum + score, 0) / scores.length
         : 0
 
       dimensionAverages[dim.key] = Number(avg.toFixed(2))
